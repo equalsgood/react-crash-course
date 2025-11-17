@@ -1,21 +1,28 @@
 import './styles/App.css';
 import PostList from "./components/PostList";
-import {createRef, useState} from "react";
+import {useEffect, useState} from "react";
 import PostForm from "./components/PostForm";
 import PostFilter from "./components/PostFilter";
 import Modal from "./components/UI/Modal";
 import Button from "./components/UI/Button";
 import {usePosts} from "./hooks/usePosts";
+import PostService from "./api/PostService";
+import Loader from "./components/UI/Loader";
+import {useFetching} from "./hooks/useFetching";
 
 function App() {
-    const [posts, setPosts] = useState([
-        { id: 1, name: '1Javascript', description: "bDescription", nodeRef: createRef(null) },
-        { id: 2, name: '2Javascript 2', description: "aDescription", nodeRef: createRef(null) },
-        { id: 3, name: '3Javascript 3', description: "cDescription", nodeRef: createRef(null) },
-    ]);
+    const [posts, setPosts] = useState([]);
     const [filter, setFilter] = useState({ searchQuery: '', selectedSort: '' });
     const [modal, setModal] = useState(false);
     const searchedAndSortedPosts = usePosts(posts, filter.selectedSort, filter.searchQuery);
+    const [fetchPosts, isLoading, postError] = useFetching(async () => {
+        const posts = await PostService.getAll();
+        setPosts(posts);
+    });
+
+    useEffect(() => {
+        fetchPosts();
+    }, []);
 
     const addPostHandler = (newPost) => {
         setPosts([...posts, newPost]);
@@ -36,7 +43,11 @@ function App() {
             </Modal>
             <hr/>
             <PostFilter filter={filter} setFilter={setFilter} />
-            <PostList remove={remove} title='Posts about JS' posts={searchedAndSortedPosts} />
+            { postError && <h1>Error occurred ${postError}</h1>}
+            { isLoading
+                ? <Loader/>
+                : <PostList remove={remove} title='Posts about JS' posts={searchedAndSortedPosts} />
+            }
         </main>
     );
 }
