@@ -7,7 +7,7 @@ const PostItem = ({ post, number, remove }) => {
     return (
         <li ref={nodeRef} className='post'>
             <div>
-                <strong>{number}. {name}</strong>
+                <strong>{id}. {name}</strong>
                 <p>{description}</p>
             </div>
             <Button onClick={() => remove(id)}>Delete</Button>

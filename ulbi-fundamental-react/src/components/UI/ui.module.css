@@ -59,3 +59,25 @@
         transform: rotate(360deg) scale(1.4);
     }
 }
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin: 30px 0;
+}
+
+.page:hover {
+    background: teal;
+    color: white;
+}
+
+.page_active {
+    border: 2px solid orange;
+    font-weight: bold;
+    color: orange;
+}
+
+.page_active:hover {
+    background: orange;
+}
