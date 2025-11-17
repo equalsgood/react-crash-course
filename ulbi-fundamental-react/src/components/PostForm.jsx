@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {createRef, useState} from 'react';
 import Input from "./UI/Input";
 import Button from "./UI/Button";
 
@@ -12,6 +12,7 @@ const PostForm = ({ addPostHandler }) => {
             id: Date.now(),
             name: postName,
             description: postDescription,
+            nodeRef: createRef(null)
         }
 
         addPostHandler(newPost);

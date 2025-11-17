@@ -2,10 +2,10 @@ import React from 'react';
 import Button from "./UI/Button";
 
 const PostItem = ({ post, number, remove }) => {
-    const { id, name, description } = post;
+    const { id, name, description, nodeRef } = post;
 
     return (
-        <li className='post'>
+        <li ref={nodeRef} className='post'>
             <div>
                 <strong>{number}. {name}</strong>
                 <p>{description}</p>

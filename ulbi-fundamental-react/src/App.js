@@ -1,30 +1,21 @@
 import './styles/App.css';
 import PostList from "./components/PostList";
-import {useMemo, useState} from "react";
+import {createRef, useState} from "react";
 import PostForm from "./components/PostForm";
 import PostFilter from "./components/PostFilter";
 import Modal from "./components/UI/Modal";
 import Button from "./components/UI/Button";
+import {usePosts} from "./hooks/usePosts";
 
 function App() {
     const [posts, setPosts] = useState([
-        { id: 1, name: '1Javascript', description: "bDescription" },
-        { id: 2, name: '2Javascript 2', description: "aDescription" },
-        { id: 3, name: '3Javascript 3', description: "cDescription" },
+        { id: 1, name: '1Javascript', description: "bDescription", nodeRef: createRef(null) },
+        { id: 2, name: '2Javascript 2', description: "aDescription", nodeRef: createRef(null) },
+        { id: 3, name: '3Javascript 3', description: "cDescription", nodeRef: createRef(null) },
     ]);
     const [filter, setFilter] = useState({ searchQuery: '', selectedSort: '' });
     const [modal, setModal] = useState(false);
-
-    const sortedPosts = useMemo(() => {
-        if(filter.selectedSort) {
-            return [...posts].sort((a, b) => a[filter.selectedSort].localeCompare(b[filter.selectedSort]));
-        }
-        return posts;
-    },[filter.selectedSort, posts]);
-
-    const searchedAndSortedPosts = useMemo(() => {
-        return sortedPosts.filter(post => post.name.toLowerCase().includes(filter.searchQuery.toLowerCase()));
-    },[filter.searchQuery, sortedPosts]);
+    const searchedAndSortedPosts = usePosts(posts, filter.selectedSort, filter.searchQuery);
 
     const addPostHandler = (newPost) => {
         setPosts([...posts, newPost]);
